@@ -5,6 +5,7 @@ import torch
 from skimage import io
 from torch.utils.data import Dataset
 import numpy as np
+from numpy import inf
 
 class CatsAndDogsDataset(Dataset):
     def __init__(self, csv_file, root_dir, transform=None):
@@ -45,6 +46,18 @@ class SeaIce(Dataset):
         # img_path = os.path.join(self.root_dir, self.annotations.iloc[index, 0])
         img_path = self.data_files[index][0]
         image = io.imread(img_path)
+        u = np.zeros((image.shape[0], image.shape[1], 5))
+        u[:, :, 0:3] = image[:, :, 0:3]
+        with np.errstate(divide='ignore', invalid='ignore'):
+            y = image[:, :, 0] / image[:, :, 1]
+            y[y==inf] = 255
+            u[:,:,3] = y
+
+            y = (image[:, :, 1] - image[:, :, 0])/image[:, :, 1]
+
+            y[y == inf] = 255
+            u[:, :, 4] = y
+            image = u
         y_label = torch.tensor(int(self.data_files[index][1]))
 
         if self.transform:

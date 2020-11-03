@@ -108,13 +108,14 @@ def main():
         transforms.ToTensor()
     ])
 
-    train_dir = '10_percen_sea_ice/train'
-    val_dir = '10_percen_sea_ice/val'
-    test_dir = '10_percen_sea_ice/just_test'
+    train_dir = '50_samples/train+val'
+    val_dir = '50_samples/test/'
+    test_dir = '50_samples/test'
+    unlabeled_data = '50_samples/unlabeled_data'
 
     train_labeled_set = SeaIce(root_dir=[train_dir], transform=sea_ice_transforms)
-    train_unlabeled_set1 = SeaIce(root_dir=[train_dir, val_dir, test_dir], transform=sea_ice_transforms)
-    train_unlabeled_set2 = SeaIce(root_dir=[train_dir, val_dir, test_dir], transform=sea_ice_transforms)
+    train_unlabeled_set1 = SeaIce(root_dir=[unlabeled_data], transform=sea_ice_transforms)
+    train_unlabeled_set2 = SeaIce(root_dir=[unlabeled_data], transform=sea_ice_transforms)
     val_set = SeaIce(root_dir=[val_dir], transform=sea_ice_transforms)
     test_set = SeaIce(root_dir=[test_dir], transform=sea_ice_transforms)
 
